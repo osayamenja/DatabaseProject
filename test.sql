@@ -1,9 +1,13 @@
 
+DROP DATABASE IF EXISTS Trade_Firm;
+CREATE DATABASE Trade_Firm;
+
+USE Trade_Firm;
 
 CREATE TABLE Employee
 (
   employee_ID		INT				PRIMARY KEY		AUTO_INCREMENT,
-  SSN				varchar(11),
+  SSN				varchar(11)		UNIQUE,
   employee_type		varchar(30),
   first_name		varchar(30),
   last_name			varchar(40),
@@ -65,7 +69,7 @@ CREATE TABLE External_Applicant
   first_name		varchar(30),
   last_name			varchar(40),
   email				varchar(50),
-  SSN				varchar(11),
+  SSN				varchar(11)		UNIQUE,
   applicant_type	varchar(2)
 );
 
@@ -127,3 +131,20 @@ CREATE TABLE External_Job
 	FOREIGN KEY (job_ID)
     REFERENCES Job (job_ID)
 );
+
+INSERT INTO Department(department_name, location, jobs_available, employee_population) VALUES
+("Quality_Assurance", "34b", 5, 0),
+("HR", "15a", 5, 0),
+("Sales", "5c", 20, 0),
+("Engineering", "10a", 10, 0);
+
+INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type) VALUES
+("Bill", "Jones", "billjones@gmail.com", "153-88-4237", "FT"),
+("Bethany", "Thomas", "bthomas@gmail.com", "144-16-5555", "FT"),
+("Julian", "Rodriguez", "jrod55@gmail.com", "483-73-4242", "PT");
+
+INSERT INTO Job(post_date, deadline, salary, location) VALUES
+("2021-04-19", "2021-05-21", 85000, "23c");
+
+INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name, applicant_ID, job_ID) VALUES
+("153-88-4237", "Engineer", "Bill", "Jones", 90000, "Engineering", 1, 1);
