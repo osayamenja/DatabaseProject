@@ -1,4 +1,5 @@
 
+
 CREATE TABLE Employee
 (
   employee_ID		INT				PRIMARY KEY		AUTO_INCREMENT,
