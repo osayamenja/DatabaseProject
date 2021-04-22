@@ -133,18 +133,67 @@ CREATE TABLE External_Job
 );
 
 INSERT INTO Department(department_name, location, jobs_available, employee_population) VALUES
-("Quality_Assurance", "34b", 5, 0),
+("Recruiting", "34b", 5, 0),
 ("HR", "15a", 5, 0),
-("Sales", "5c", 20, 0),
+("Part-time", "5c", 20, 0),
 ("Engineering", "10a", 10, 0);
 
 INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type) VALUES
 ("Bill", "Jones", "billjones@gmail.com", "153-88-4237", "FT"),
 ("Bethany", "Thomas", "bthomas@gmail.com", "144-16-5555", "FT"),
-("Julian", "Rodriguez", "jrod55@gmail.com", "483-73-4242", "PT");
+("Julian", "Rodriguez", "jrod55@gmail.com", "483-73-4242", "FT"),
+("Mitchell", "Collins", "mc25000@gmail.com", "456-13-1388", "PT"),
+("Eva", "Stevens", "estevens@outlook.com", "312-35-7475", "FT"),
+("Jenna", "Carlisle", "jjj37cc@outlook.com", "100-45-7373", "PT"),
+("Tyrod", "Johnson", "tytheman@outlook.com", "736-48-1357", "FT"),
+("Kate", "Rodgers", "krodgers02@outlook.com", "736-13-7888", "FT");
+
+INSERT INTO Part_Time_Applicant(job_duration, applicant_id) VALUES
+("6 months", 4),
+("6 months", 6);
+
+INSERT INTO Full_Time_Applicant(marital_status, applicant_id) VALUES
+("S", 1),
+("S", 2),
+("M", 3),
+("S", 5),
+("M", 7),
+("M", 8);
+
+INSERT INTO Applies_For(applicant_id, job_id) VALUES
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 2),
+(5, 3),
+(6, 3),
+(7, 4),
+(8, 4);
 
 INSERT INTO Job(post_date, deadline, salary, location) VALUES
-("2021-04-19", "2021-05-21", 85000, "23c");
+("2021-04-19", "2021-05-21", 90000, "23c"),
+("2019-03-19", "2019-05-21", 90000, "23c"),
+("2019-01-02", "2019-03-13", 85000, "58a"),
+("2019-01-03", "2019-02-28", 85000, "58a");
+
+INSERT INTO Internal_Job(internal_id, job_id) VALUES
+(552, 1),
+(228, 2);
+
+INSERT INTO External_Job(external_id, job_id) VALUES
+(131, 3),
+(232, 4);
 
 INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name, applicant_ID, job_ID) VALUES
-("153-88-4237", "Engineer", "Bill", "Jones", 90000, "Engineering", 1, 1);
+("153-88-4237", "Engineer", "Bill", "Jones", 90000, "Engineering", 1, 1),
+("483-73-4242", "Engineer", "Julian", "Rodriguez", 90000, "Engineering", 3, 2),
+("312-35-7475", "Recruiter", "Eva", "Stevens", 85000, "Recruiting", 5, 3),
+("736-48-1357", "Recruiter", "Tyrod", "Johnson", 85000, "Recruiting", 7, 4);
+
+INSERT INTO Engineer(employee_level, project, employee_id) VALUES
+(5, "Netkwork Efficiency", 1),
+(4, "Hardware Optimization", 2);
+
+INSERT INTO Recruiter(recruiting_location, engineering_level, employee_id) VALUES
+("Burbank", 2, 3),
+("Brownsville", 2, 4);
