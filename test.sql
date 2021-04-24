@@ -44,8 +44,8 @@ CREATE TABLE Recruiter
 
 CREATE TABLE HR_Manager
 (
-  employee_ID		INT					PRIMARY KEY,
-  manager_ID		INT					NOT NULL,
+  employee_ID		INT							PRIMARY KEY,
+  manager_ID		VARCHAR(255)					NOT NULL,
   CONSTRAINT HR_Manager_fk_Employee
     FOREIGN KEY (employee_ID)
     REFERENCES Employee (employee_ID)
@@ -115,7 +115,7 @@ CREATE TABLE Job
 
 CREATE TABLE Internal_Job
 (
-  internal_ID		INT,
+  internal_ID		VARCHAR(255),
   job_ID			INT				PRIMARY KEY,
   CONSTRAINT Internal_Job_fk_Job
 	FOREIGN KEY (job_ID)
@@ -124,14 +124,14 @@ CREATE TABLE Internal_Job
 
 CREATE TABLE External_Job
 (
-  external_ID		INT,
+  external_ID		VARCHAR(255),
   job_ID			INT				PRIMARY KEY,
   CONSTRAINT External_Job_fk_Job
 	FOREIGN KEY (job_ID)
     REFERENCES Job (job_ID)
 );
 
-INSERT INTO Department(department_name, location, jobs_available, employee_population) VALUES
+INSERT INTO Department(department_name, location) VALUES
 ('Recruiting', 'NY'),
 ('HR', 'TX'),
 ('Engineering', 'CA');
@@ -147,7 +147,7 @@ INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type
 ('Brear', 'McFall', 'BreMcFall15@gmail.com', '569-89-0126', 'FT'),
 ('Aleksandr', 'Imlin', 'AleImlin19@gmail.com', '490-78-6379', 'FT'),
 ('Ree', 'Pavia', 'ReePavia33@gmail.com', '128-19-2696', 'FT'),
-('Robert', 'Di Biagio', 'RobDi Biagio18@gmail.com', '724-85-5983', 'FT'),
+('Robert', 'DiBiagio', 'RobDiBiagio18@gmail.com', '724-85-5983', 'FT'),
 ('Calypso', 'Levin', 'CalLevin4@gmail.com', '530-22-9337', 'FT'),
 ('Bron', 'Johansen', 'BroJohansen39@gmail.com', '236-46-3083', 'FT'),
 ('Lucie', 'Brant', 'LucBrant13@gmail.com', '361-97-3413', 'FT'),
@@ -209,7 +209,7 @@ INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type
 ('Valery', 'Kift', 'ValKift26@gmail.com', '885-70-1347', 'FT'),
 ('Beck', 'Braddock', 'BecBraddock20@gmail.com', '486-82-6639', 'PT'),
 ('Federico', 'Abry', 'FedAbry10@gmail.com', '345-40-3540', 'PT'),
-('Ellynn', 'Van der Velde', 'EllVan der Velde31@gmail.com', '631-64-9687', 'PT'),
+('Ellynn', 'Vandervelde', 'EllVandervelde31@gmail.com', '631-64-9687', 'PT'),
 ('Yoshi', 'Pablo', 'YosPablo13@gmail.com', '295-07-7686', 'PT'),
 ('Rowney', 'McParlin', 'RowMcParlin13@gmail.com', '802-97-7295', 'PT'),
 ('Davina', 'MacSporran', 'DavMacSporran31@gmail.com', '614-60-8219', 'PT'),
@@ -221,7 +221,7 @@ INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type
 ('Dennet', 'Dohrmann', 'DenDohrmann44@gmail.com', '474-40-4358', 'PT'),
 ('Rhianon', 'Lowell', 'RhiLowell42@gmail.com', '437-35-5785', 'PT'),
 ('Rosemarie', 'Gowdy', 'RosGowdy14@gmail.com', '790-74-3863', 'PT'),
-('Townsend', 'de Clerc', 'Towde Clerc26@gmail.com', '186-13-7737', 'PT'),
+('Townsend', 'McCall', 'TowdeClerc26@gmail.com', '186-13-7737', 'PT'),
 ('Bambie', 'Causer', 'BamCauser45@gmail.com', '513-70-7518', 'PT'),
 ('Lin', 'Howat', 'LinHowat36@gmail.com', '888-73-7676', 'PT'),
 ('Bartram', 'Joslow', 'BarJoslow12@gmail.com', '680-08-7562', 'PT'),
@@ -229,7 +229,7 @@ INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type
 ('Phillipe', 'Thurling', 'PhiThurling11@gmail.com', '384-17-9647', 'PT'),
 ('Victoria', 'Reddle', 'VicReddle44@gmail.com', '570-33-2950', 'PT'),
 ('Viviyan', 'Gentric', 'VivGentric10@gmail.com', '272-54-3051', 'PT'),
-('Natalee', 'St. John', 'NatSt. John38@gmail.com', '424-76-0854', 'PT'),
+('Natalee', 'Johnson', 'NatJohn38@gmail.com', '424-76-0854', 'PT'),
 ('Konstance', 'Pulster', 'KonPulster12@gmail.com', '834-86-9822', 'PT'),
 ('Verna', 'Abbis', 'VerAbbis36@gmail.com', '744-01-3895', 'PT'),
 ('Nicky', 'Paske', 'NicPaske18@gmail.com', '820-98-4553', 'PT'),
@@ -444,58 +444,58 @@ INSERT INTO Applies_For(applicant_id, job_id) VALUES
 (100, 13);
 
 INSERT INTO Job(post_date, deadline, salary, location, department_name, job_type) VALUES
-('2020-01-02', '2021-03-20', 85000, 'TX','HR','EJ'),
-('2020-03-19', '2021-05-21', 90000, 'CA','Engineering', 'EJ'),
-('2020-07-27', '2021-02-03', 140000, 'CA', 'Engineering', 'EJ'),
-('2020-11-02', '2021-04-12', 62000, 'CA', 'Engineering', 'EJ'),
-('2020-10-14', '2021-03-22', 94000, 'CA', 'Engineering', 'EJ'),
-('2021-01-10', '2021-03-25', 125000, 'CA', 'Engineering', 'EJ'),
-('2020-05-12', '2021-02-22', 137000, 'CA', 'Engineering', 'EJ'),
-('2021-01-07', '2021-01-28', 111000, 'CA', 'Engineering', 'EJ'),
-('2020-10-11', '2021-02-01', 104000, 'CA', 'Engineering', 'EJ'),
-('2020-05-10', '2021-01-28', 102000, 'CA', 'Engineering', 'EJ'),
-('2021-02-03', '2021-04-02', 105000, 'CA', 'Engineering', 'EJ'),
-('2020-12-19', '2021-01-24', 148000, 'CA', 'Engineering', 'EJ'),
-('2020-06-04', '2021-04-20', 121000, 'CA', 'Engineering', 'EJ'),
-('2020-05-06', '2021-01-27', 132000, 'CA', 'Engineering', 'EJ'),
-('2020-09-02', '2021-03-16', 130000, 'CA', 'Engineering', 'EJ'),
-('2020-11-16', '2021-01-26', 54000, 'CA', 'Engineering', 'EJ'),
-('2020-07-31', '2021-02-12', 85000, 'NY', 'Recruiting', 'EJ'),
-('2020-05-17', '2021-03-27', 87000, 'NY', 'Recruiting', 'EJ'),
-('2020-10-08', '2021-02-18', 94000, 'NY', 'Recruiting', 'IJ'),
-("2020-01-03", "2021-02-28", 85000, "NY",'Recruiting','IJ'),
-('2020-07-05', '2021-03-24', 145000, 'CA', 'Engineering', 'IJ'),
-('2020-11-16', '2021-04-21', 144000, 'CA', 'Engineering', 'IJ'),
-('2020-08-07', '2021-02-03', 141000, 'CA', 'Engineering', 'IJ'),
-('2021-04-19', '2021-05-21', 90000, 'TX','HR', 'IJ');
+('2020-01-02', '2021-08-20', 85000, 'TX','HR','EJ'),
+('2020-03-19', '2021-09-21', 90000, 'CA','Engineering', 'EJ'),
+('2020-07-27', '2021-08-03', 140000, 'CA', 'Engineering', 'EJ'),
+('2020-11-02', '2021-10-12', 62000, 'CA', 'Engineering', 'EJ'),
+('2020-10-14', '2021-09-22', 94000, 'CA', 'Engineering', 'EJ'),
+('2021-01-10', '2021-10-25', 125000, 'CA', 'Engineering', 'EJ'),
+('2020-05-12', '2021-06-22', 137000, 'CA', 'Engineering', 'EJ'),
+('2021-01-07', '2021-09-28', 111000, 'CA', 'Engineering', 'EJ'),
+('2020-10-11', '2021-09-01', 104000, 'CA', 'Engineering', 'EJ'),
+('2020-05-10', '2021-12-28', 102000, 'CA', 'Engineering', 'EJ'),
+('2021-02-03', '2021-11-02', 105000, 'CA', 'Engineering', 'EJ'),
+('2020-12-19', '2021-11-24', 148000, 'CA', 'Engineering', 'EJ'),
+('2020-06-04', '2021-10-20', 121000, 'CA', 'Engineering', 'EJ'),
+('2020-05-06', '2021-7-27', 132000, 'CA', 'Engineering', 'EJ'),
+('2020-09-02', '2021-08-20', 130000, 'CA', 'Engineering', 'EJ'),
+('2020-11-16', '2021-09-29', 54000, 'CA', 'Engineering', 'EJ'),
+('2020-07-31', '2021-12-12', 85000, 'NY', 'Recruiting', 'EJ'),
+('2020-05-17', '2021-08-07', 87000, 'NY', 'Recruiting', 'EJ'),
+('2020-10-08', '2021-08-08', 94000, 'NY', 'Recruiting', 'IJ'),
+("2020-01-03", "2021-09-13", 85000, "NY",'Recruiting','IJ'),
+('2020-07-05', '2021-06-17', 145000, 'CA', 'Engineering', 'IJ'),
+('2020-11-16', '2021-05-21', 144000, 'CA', 'Engineering', 'IJ'),
+('2020-08-07', '2021-05-29', 141000, 'CA', 'Engineering', 'IJ'),
+('2021-04-19', '2021-05-28', 90000, 'TX','HR', 'IJ');
 
 INSERT INTO Internal_Job(internal_id, job_id) VALUES
-(2000, 19),
-(2001, 20),
-(2002, 21),
-(2003, 22),
-(2004, 23),
-(2005, 24);
+('19I', 19),
+('20I', 20),
+('21I', 21),
+('22I', 22),
+('23I', 23),
+('24I', 24);
 
 INSERT INTO External_Job(external_id, job_id) VALUES
-(99, 1),
-(100, 2),
-(101, 3),
-(102, 4),
-(103, 5),
-(104, 6),
-(105, 7),
-(106, 8),
-(107, 9),
-(108, 10),
-(109, 11),
-(110, 12),
-(111, 13),
-(112, 14),
-(113, 15),
-(114, 16),
-(115, 17),
-(116, 18);
+('IE', 1),
+('2E', 2),
+('3E', 3),
+('4E', 4),
+('5E', 5),
+('6E', 6),
+('7E', 7),
+('8E', 8),
+('9E', 9),
+('10E', 10),
+('11E', 11),
+('12E', 12),
+('13E', 13),
+('14E', 14),
+('15E', 15),
+('16E', 16),
+('17E', 17),
+('18E', 18);
 
 INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name, job_ID) VALUES
 ('153-88-4237', 'Engineer', 'Bill', 'Jones', 90000, 'Engineering', 18),
@@ -567,4 +567,65 @@ INSERT INTO HR_Manager(employee_id, manager_id) VALUES
 (24, 809),
 (25, 810);
 
+SET autocommit = OFF;
+
+DROP PROCEDURE IF EXISTS performJobSwitch;
+
+DELIMITER $$
+CREATE PROCEDURE performJobSwitch()
+BEGIN
+	DECLARE errorFlag INT DEFAULT 0; #varable to be used to detect error.
+    
+	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+    SET errorFlag = 1;
+    END;
+    
+    START TRANSACTION;
+		INSERT INTO External_Job(external_id, job_id)
+		SELECT (concat(job_id, 'E')), job_id
+		FROM Job
+		WHERE (salary > 140000 AND department_name = 'Engineering' AND deadline <= '2021-06-30');
+
+		UPDATE Job
+		SET job_type = 'EJ'
+		WHERE (salary > 140000 AND department_name = 'Engineering' AND deadline <= '2021-06-30');
+
+		DELETE FROM Internal_Job
+		WHERE job_id IN (	SELECT job_id
+							FROM Job
+							WHERE (salary > 140000 AND department_name = 'Engineering' AND deadline <= '2021-06-30'));
+    IF (errorFlag = 0)THEN 
+		COMMIT;
+	ELSE
+		ROLLBACK;
+	END IF;
+END$$
+
+DELIMITER ;
 -- All insertions have been completed. Queries to be added below on 04-23-2021
+-- DELETE Query
+/*The company has decided to eliminate applicants that requested for a part time contract of lesser than 3 months as it is seeking for long-term workforce expansion*/
+SELECT job_duration, first_name, last_name 
+FROM (Part_Time_Applicant NATURAL JOIN External_applicant)
+WHERE job_duration IN ('1 months', '2 months', '3 months');
+
+SET SQL_SAFE_UPDATES = 0; -- this statement is necessary to prevent an error of code 1175 that prevents deletion from a table when a KEY column is not used in the WHERE clause.
+DELETE Part_Time_Applicant, External_applicant
+FROM (Part_Time_Applicant NATURAL JOIN External_applicant)
+WHERE job_duration IN ('1 months', '2 months', '3 months');
+
+/*The company decided to open up two lucrative internal engineering jobs to the public because they have not recieved any internal applicants and because the deadlines are imminent for said jobs.
+ In this case, imminecy refers to dates before 2021-06-30*/
+CALL performJobSwitch();
+
+-- Unit tests
+SELECT * 
+FROM JOB NATURAL JOIN External_Job
+WHERE (salary > 140000 AND department_name = 'Engineering' AND deadline <= '2021-06-30');
+
+
+
+
+
+
