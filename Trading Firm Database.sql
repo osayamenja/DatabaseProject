@@ -555,17 +555,17 @@ INSERT INTO Recruiter(recruiting_location, engineering_level, employee_id) VALUE
 ('Houston', 7, 27);
 
 INSERT INTO HR_Manager(employee_id, manager_id) VALUES
-(10, 800),
-(12, 801),
-(15, 802),
-(16, 803),
-(17, 804),
-(20, 805),
-(21, 806),
-(22, 807),
-(23, 808),
-(24, 809),
-(25, 810);
+(10, '10M'),
+(12, '12M'),
+(15, '15M'),
+(16, '16M'),
+(17, '17M'),
+(20, '20M'),
+(21, '21M'),
+(22, '22M'),
+(23, '23M'),
+(24, '24M'),
+(25, '25SM');
 
 SET autocommit = OFF;
 
@@ -616,14 +616,79 @@ FROM (Part_Time_Applicant NATURAL JOIN External_applicant)
 WHERE job_duration IN ('1 months', '2 months', '3 months');
 
 /*The company decided to open up two lucrative internal engineering jobs to the public because they have not recieved any internal applicants and because the deadlines are imminent for said jobs.
- In this case, imminecy refers to dates before 2021-06-30*/
+ In this case, imminency refers to dates before 2021-06-30*/
 CALL performJobSwitch();
 
--- Unit tests
-SELECT * 
-FROM JOB NATURAL JOIN External_Job
-WHERE (salary > 140000 AND department_name = 'Engineering' AND deadline <= '2021-06-30');
+-- Use the next three statements to activate logging
+SET global log_output = 'FILE';
+SET global general_log_file='C:/wamp64/logs/general--2query.log'; -- use your wamp server's path. The path herein is for my computer.
+SET global general_log = 1;
+-- Use the following statements to deactivate logging.
+SET global general_log = 0;
 
+-- As expected, the largest population is for external applicants.
+SELECT COUNT(*)
+FROM External_Applicant;
+
+-- The chosen key entity for this query would be the HR managers of the trading firm 
+SELECT * 
+FROM HR_Manager NATURAL JOIN Employee;
+
+-- The cooperative entities for this query would be the only Supervisory HR manager, denoted by "SM" in their manager ID, and their subordinate Recruiters.
+SELECT *
+FROM (	SELECT first_name, last_name, SSN, employee_ID, department_name
+		FROM Recruiter NATURAL JOIN Employee AS E) AS T1 CROSS JOIN (	SELECT first_name AS Mgr_first_name, last_name AS Mgr_last_name, SSN AS Mgr_SSN, employee_ID AS Mgr_employee_ID, 
+																				department_name AS Mgr_department_name 
+																		FROM HR_Manager NATURAL JOIN Employee
+																		WHERE  manager_id LIKE '%SM') AS T2;
+DROP VIEW IF EXISTS External_applicants_info;
+CREATE VIEW External_applicants_info
+AS 	SELECT *
+	FROM (Job AS TB1 NATURAL JOIN 		(SELECT job_ID
+										FROM Applies_For) AS TB2);
+
+DROP VIEW IF EXISTS Internal_applicants_info;
+CREATE VIEW Internal_applicants_info
+AS 	SELECT * 
+	FROM (Job AS T1 NATURAL JOIN 		(SELECT job_ID
+										FROM Employee
+										WHERE job_ID IS NOT NULL) AS T2); 
+
+-- This query obtains the average number of total applicants (inluding external and internal) each posted job recieves. 
+SELECT ROUND(AVG(total)) AS Average_applicant_per_job
+FROM
+(	SELECT job_ID, COUNT(*) AS total
+	FROM
+	(SELECT *
+	FROM External_applicants_info 
+	UNION ALL 
+	SELECT *
+	FROM Internal_applicants_info) AS T
+	GROUP BY job_ID) AS T2;
+
+DROP VIEW IF EXISTS External_applicants_aggregate;
+CREATE VIEW External_applicants_aggregate
+AS SELECT job_ID, COUNT(*) AS No_of_external_applicants
+FROM External_applicants_info
+GROUP BY job_ID;
+
+DROP VIEW IF EXISTS Internal_applicants_aggregate;
+CREATE VIEW Internal_applicants_aggregate
+AS SELECT job_ID, COUNT(*) AS No_of_internal_applicants
+FROM Internal_applicants_info
+GROUP BY job_ID;
+
+-- This query obtains the number of total applicants for each job posted in 2020. The table is sorted by posted date and deadline.
+SELECT *, COUNT(*) AS Total_Applicants
+FROM
+(	SELECT *
+	FROM External_applicants_info 
+	UNION ALL 
+	SELECT *
+	FROM Internal_applicants_info) AS T
+WHERE post_date < '2021-01-01'
+GROUP BY job_ID
+ORDER BY post_date ASC, deadline ASC;
 
 
 
