@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS Trade_Firm;
 CREATE DATABASE Trade_Firm;
 
 USE Trade_Firm;
-
+ -- CREATE statements.
 CREATE TABLE Employee
 (
   employee_ID		INT				PRIMARY KEY		AUTO_INCREMENT,
@@ -131,6 +131,7 @@ CREATE TABLE External_Job
     REFERENCES Job (job_ID)
 );
 
+-- INSERT statements.
 INSERT INTO Department(department_name, location) VALUES
 ('Recruiting', 'NY'),
 ('HR', 'TX'),
@@ -330,6 +331,7 @@ INSERT INTO Full_Time_Applicant(marital_status, applicant_id) VALUES
 ('M', 57),
 ('S', 58),
 ('M', 59),
+('M', 60),
 ('S', 61),
 ('S', 62),
 ('M', 63),
@@ -567,6 +569,11 @@ INSERT INTO HR_Manager(employee_id, manager_id) VALUES
 (24, '24M'),
 (25, '25SM');
 
+-- UPDATE Query
+/*The company decided to open up two lucrative internal engineering jobs to the public because they have not recieved any internal applicants and because the deadlines are imminent for said jobs.
+ In this case, imminency refers to dates before 2021-06-30. Opening to the public means the following: 
+ inserting the pertinent tuples into the external job table, changing their job type identifiers, and deleting those tuples from the internal job table to avoide redundancy*/
+ -- This is a transaction that performs the above business action.
 SET autocommit = OFF;
 
 DROP PROCEDURE IF EXISTS performJobSwitch;
@@ -574,7 +581,7 @@ DROP PROCEDURE IF EXISTS performJobSwitch;
 DELIMITER $$
 CREATE PROCEDURE performJobSwitch()
 BEGIN
-	DECLARE errorFlag INT DEFAULT 0; #varable to be used to detect error.
+	DECLARE errorFlag INT DEFAULT 0; #variable to be used to detect error.
     
 	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -603,31 +610,19 @@ BEGIN
 END$$
 
 DELIMITER ;
--- All insertions have been completed. Queries to be added below on 04-23-2021
--- DELETE Query
-/*The company has decided to eliminate applicants that requested for a part time contract of lesser than 3 months as it is seeking for long-term workforce expansion*/
-SELECT job_duration, first_name, last_name 
-FROM (Part_Time_Applicant NATURAL JOIN External_applicant)
-WHERE job_duration IN ('1 months', '2 months', '3 months');
 
+-- DELETE Query
+/*The company has decided to eliminate applicants that requested for a part time contract of lesser than 3 months as it is seeking for long-term workforce expansion*/ 
 SET SQL_SAFE_UPDATES = 0; -- this statement is necessary to prevent an error of code 1175 that prevents deletion from a table when a KEY column is not used in the WHERE clause.
 DELETE Part_Time_Applicant, External_applicant
 FROM (Part_Time_Applicant NATURAL JOIN External_applicant)
 WHERE job_duration IN ('1 months', '2 months', '3 months');
 
-/*The company decided to open up two lucrative internal engineering jobs to the public because they have not recieved any internal applicants and because the deadlines are imminent for said jobs.
- In this case, imminency refers to dates before 2021-06-30*/
+-- UPDATE Query
 CALL performJobSwitch();
 
--- Use the next three statements to activate logging
-SET global log_output = 'FILE';
-SET global general_log_file='C:/wamp64/logs/general--2query.log'; -- use your wamp server's path. The path herein is for my computer.
-SET global general_log = 1;
--- Use the following statements to deactivate logging.
-SET global general_log = 0;
-
 -- As expected, the largest population is for external applicants.
-SELECT COUNT(*)
+SELECT COUNT(*) AS Largest_entity_population
 FROM External_Applicant;
 
 -- The chosen key entity for this query would be the HR managers of the trading firm 
@@ -641,12 +636,14 @@ FROM (	SELECT first_name, last_name, SSN, employee_ID, department_name
 																				department_name AS Mgr_department_name 
 																		FROM HR_Manager NATURAL JOIN Employee
 																		WHERE  manager_id LIKE '%SM') AS T2;
+-- This view comprises the information of all external applicants.
 DROP VIEW IF EXISTS External_applicants_info;
 CREATE VIEW External_applicants_info
 AS 	SELECT *
 	FROM (Job AS TB1 NATURAL JOIN 		(SELECT job_ID
 										FROM Applies_For) AS TB2);
 
+-- This view comprises the information of all internal applicants
 DROP VIEW IF EXISTS Internal_applicants_info;
 CREATE VIEW Internal_applicants_info
 AS 	SELECT * 
@@ -654,10 +651,10 @@ AS 	SELECT *
 										FROM Employee
 										WHERE job_ID IS NOT NULL) AS T2); 
 
--- This query obtains the average number of total applicants (inluding external and internal) each posted job recieves. 
-SELECT ROUND(AVG(total)) AS Average_applicant_per_job
+-- This query obtains the job with the maximum number of applicants (inluding external and internal). 
+SELECT job_ID, MAX(Total_applicants) AS Applicants, department_name AS Department, salary AS Salary, location AS Location
 FROM
-(	SELECT job_ID, COUNT(*) AS total
+(	SELECT job_ID, COUNT(*) AS Total_applicants, salary, location, department_name
 	FROM
 	(SELECT *
 	FROM External_applicants_info 
@@ -665,18 +662,6 @@ FROM
 	SELECT *
 	FROM Internal_applicants_info) AS T
 	GROUP BY job_ID) AS T2;
-
-DROP VIEW IF EXISTS External_applicants_aggregate;
-CREATE VIEW External_applicants_aggregate
-AS SELECT job_ID, COUNT(*) AS No_of_external_applicants
-FROM External_applicants_info
-GROUP BY job_ID;
-
-DROP VIEW IF EXISTS Internal_applicants_aggregate;
-CREATE VIEW Internal_applicants_aggregate
-AS SELECT job_ID, COUNT(*) AS No_of_internal_applicants
-FROM Internal_applicants_info
-GROUP BY job_ID;
 
 -- This query obtains the number of total applicants for each job posted in 2020. The table is sorted by posted date and deadline.
 SELECT *, COUNT(*) AS Total_Applicants
@@ -689,6 +674,8 @@ FROM
 WHERE post_date < '2021-01-01'
 GROUP BY job_ID
 ORDER BY post_date ASC, deadline ASC;
+
+ 
 
 
 
