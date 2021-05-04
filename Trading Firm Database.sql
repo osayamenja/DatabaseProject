@@ -4,6 +4,26 @@ CREATE DATABASE Trade_Firm;
 
 USE Trade_Firm;
  -- CREATE statements.
+ CREATE TABLE Department
+(
+  department_name		varchar(30)		NOT NULL PRIMARY KEY,
+  location				varchar(40)		NOT NULL
+);
+
+CREATE TABLE Job
+(
+  job_ID			INT				PRIMARY KEY		AUTO_INCREMENT,
+  post_date			Date			NOT NULL,
+  deadline			Date			NOT NULL,
+  salary			INT				NOT NULL,
+  location			varchar(40)		NOT NULL,
+  department_name	varchar(40)		NOT NULL,
+  job_type			varchar(2)		NOT NULL,
+  CONSTRAINT job_fk_department
+    FOREIGN KEY (department_name)
+    REFERENCES department (department_name)
+);
+
 CREATE TABLE Employee
 (
   employee_ID		INT				PRIMARY KEY		AUTO_INCREMENT,
@@ -51,12 +71,6 @@ CREATE TABLE HR_Manager
     REFERENCES Employee (employee_ID)
 );
 
-CREATE TABLE Department
-(
-  department_name		varchar(40)		NOT NULL PRIMARY KEY,
-  location				varchar(40)		NOT NULL
-);
-
 CREATE TABLE External_Applicant
 (
   applicant_ID		INT				PRIMARY KEY		AUTO_INCREMENT,
@@ -99,20 +113,6 @@ CREATE TABLE Applies_For
     PRIMARY KEY (applicant_ID, job_ID)
 );
 
-CREATE TABLE Job
-(
-  job_ID			INT				PRIMARY KEY		AUTO_INCREMENT,
-  post_date			Date			NOT NULL,
-  deadline			Date			NOT NULL,
-  salary			INT				NOT NULL,
-  location			varchar(40)		NOT NULL,
-  department_name	varchar(40)		NOT NULL,
-  job_type			varchar(2)		NOT NULL,
-  CONSTRAINT job_fk_department
-    FOREIGN KEY (department_name)
-    REFERENCES department (department_name)
-);
-
 CREATE TABLE Internal_Job
 (
   internal_ID		VARCHAR(255),
@@ -136,6 +136,66 @@ INSERT INTO Department(department_name, location) VALUES
 ('Recruiting', 'NY'),
 ('HR', 'TX'),
 ('Engineering', 'CA');
+
+INSERT INTO Job(post_date, deadline, salary, location, department_name, job_type) VALUES
+('2020-01-02', '2021-08-20', 85000, 'TX','HR','EJ'),
+('2020-03-19', '2021-09-21', 90000, 'CA','Engineering', 'EJ'),
+('2020-07-27', '2021-08-03', 140000, 'CA', 'Engineering', 'EJ'),
+('2020-11-02', '2021-10-12', 62000, 'CA', 'Engineering', 'EJ'),
+('2020-10-14', '2021-09-22', 94000, 'CA', 'Engineering', 'EJ'),
+('2021-01-10', '2021-10-25', 125000, 'CA', 'Engineering', 'EJ'),
+('2020-05-12', '2021-06-22', 137000, 'CA', 'Engineering', 'EJ'),
+('2021-01-07', '2021-09-28', 111000, 'CA', 'Engineering', 'EJ'),
+('2020-10-11', '2021-09-01', 104000, 'CA', 'Engineering', 'EJ'),
+('2020-05-10', '2021-12-28', 102000, 'CA', 'Engineering', 'EJ'),
+('2021-02-03', '2021-11-02', 105000, 'CA', 'Engineering', 'EJ'),
+('2020-12-19', '2021-11-24', 148000, 'CA', 'Engineering', 'EJ'),
+('2020-06-04', '2021-10-20', 121000, 'CA', 'Engineering', 'EJ'),
+('2020-05-06', '2021-7-27', 132000, 'CA', 'Engineering', 'EJ'),
+('2020-09-02', '2021-08-20', 130000, 'CA', 'Engineering', 'EJ'),
+('2020-11-16', '2021-09-29', 54000, 'CA', 'Engineering', 'EJ'),
+('2020-07-31', '2021-12-12', 85000, 'NY', 'Recruiting', 'EJ'),
+('2020-05-17', '2021-08-07', 87000, 'NY', 'Recruiting', 'EJ'),
+('2020-10-08', '2021-08-08', 94000, 'NY', 'Recruiting', 'IJ'),
+("2020-01-03", "2021-09-13", 85000, "NY",'Recruiting','IJ'),
+('2020-07-05', '2021-06-17', 145000, 'CA', 'Engineering', 'IJ'),
+('2020-11-16', '2021-05-21', 144000, 'CA', 'Engineering', 'IJ'),
+('2020-08-07', '2021-05-29', 141000, 'CA', 'Engineering', 'IJ'),
+('2021-04-19', '2021-05-28', 90000, 'TX','HR', 'IJ');
+
+INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name, job_ID) VALUES
+('153-88-4237', 'Engineer', 'Bill', 'Jones', 90000, 'Engineering', 18),
+('483-73-4242', 'Engineer', 'Julian', 'Rodriguez', 90000, 'Engineering', 19),
+('312-35-7475', 'Recruiter', 'Eva', 'Stevens', 85000, 'Recruiting', 23),
+('736-48-1357', 'Recruiter', 'Tyrod', 'Johnson', 85000, 'Recruiting', 24),
+('194-41-8184', 'Engineer', 'Reinold', 'Clancy', 104000, 'Engineering', 19);
+
+INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name) VALUES
+('730-89-5394', 'Recruiter', 'Randi', 'Nare', 144000, 'Recruiting'),
+('687-80-9612', 'Recruiter', 'Rayna', 'Bilham', 104000, 'Recruiting'),
+('240-63-3621', 'Engineer', 'Mitchell', 'Leil', 98000, 'Engineering'),
+('318-09-7270', 'Engineer', 'Mirabella', 'Juhruke', 79000, 'Engineering'),
+('876-99-4396', 'HR_Manager', 'Gardner', 'Beazleigh', 57000, 'HR'),
+('203-80-5528', 'Recruiter', 'Blancha', 'Elmar', 141000, 'Recruiting'),
+('490-60-1855', 'HR_Manager', 'Sandye', 'Sisselot', 115000, 'HR'),
+('596-91-2513', 'Engineer', 'Brok', 'Orans', 149000, 'Engineering'),
+('551-87-0256', 'Engineer', 'Karia', 'Burridge', 92000, 'Engineering'),
+('752-68-5417', 'HR_Manager', 'Silva', 'Hillin', 80000, 'HR'),
+('243-91-8643', 'HR_Manager', 'Franny', 'Giraux', 103000, 'HR'),
+('883-90-7491', 'HR_Manager', 'Ezequiel', 'Dorbon', 136000, 'HR'),
+('323-66-3112', 'Recruiter', 'Alisander', 'Eydel', 88000, 'Recruiting'),
+('669-77-2284', 'Recruiter', 'Daisy', 'De Francesco', 110000, 'Recruiting'),
+('201-60-8504', 'HR_Manager', 'Brock', 'McLean', 117000, 'HR'),
+('898-97-8216', 'HR_Manager', 'Leopold', 'Coast', 131000, 'HR'),
+('349-63-1719', 'HR_Manager', 'Cord', 'Mapes', 109000, 'HR'),
+('385-42-1651', 'HR_Manager', 'Stella', 'Faux', 87000, 'HR'),
+('418-03-4362', 'HR_Manager', 'Eleni', 'Lutas', 128000, 'HR'),
+('389-70-8949', 'HR_Manager', 'Sibylle', 'Glavis', 149000, 'HR'),
+('359-38-7917', 'Recruiter', 'Gayle', 'Spadazzi', 110000, 'Recruiting'),
+('520-77-2028', 'Recruiter', 'Mic', 'Duiged', 62000, 'Recruiting'),
+('144-01-8634', 'Engineer', 'Dena', 'Burness', 63000, 'Engineering'),
+('468-40-5940', 'Engineer', 'Torey', 'Provest', 124000, 'Engineering'),
+('714-78-0040', 'Recruiter', 'Ewell', 'Hadland', 116000, 'Recruiting'); 
 
 INSERT INTO External_Applicant(first_name, last_name, email, SSN, applicant_type) VALUES
 ('Gisele', 'Penna', 'GisPenna39@gmail.com', '442-34-8920', 'FT'),
@@ -445,32 +505,6 @@ INSERT INTO Applies_For(applicant_id, job_id) VALUES
 (99, 9),
 (100, 13);
 
-INSERT INTO Job(post_date, deadline, salary, location, department_name, job_type) VALUES
-('2020-01-02', '2021-08-20', 85000, 'TX','HR','EJ'),
-('2020-03-19', '2021-09-21', 90000, 'CA','Engineering', 'EJ'),
-('2020-07-27', '2021-08-03', 140000, 'CA', 'Engineering', 'EJ'),
-('2020-11-02', '2021-10-12', 62000, 'CA', 'Engineering', 'EJ'),
-('2020-10-14', '2021-09-22', 94000, 'CA', 'Engineering', 'EJ'),
-('2021-01-10', '2021-10-25', 125000, 'CA', 'Engineering', 'EJ'),
-('2020-05-12', '2021-06-22', 137000, 'CA', 'Engineering', 'EJ'),
-('2021-01-07', '2021-09-28', 111000, 'CA', 'Engineering', 'EJ'),
-('2020-10-11', '2021-09-01', 104000, 'CA', 'Engineering', 'EJ'),
-('2020-05-10', '2021-12-28', 102000, 'CA', 'Engineering', 'EJ'),
-('2021-02-03', '2021-11-02', 105000, 'CA', 'Engineering', 'EJ'),
-('2020-12-19', '2021-11-24', 148000, 'CA', 'Engineering', 'EJ'),
-('2020-06-04', '2021-10-20', 121000, 'CA', 'Engineering', 'EJ'),
-('2020-05-06', '2021-7-27', 132000, 'CA', 'Engineering', 'EJ'),
-('2020-09-02', '2021-08-20', 130000, 'CA', 'Engineering', 'EJ'),
-('2020-11-16', '2021-09-29', 54000, 'CA', 'Engineering', 'EJ'),
-('2020-07-31', '2021-12-12', 85000, 'NY', 'Recruiting', 'EJ'),
-('2020-05-17', '2021-08-07', 87000, 'NY', 'Recruiting', 'EJ'),
-('2020-10-08', '2021-08-08', 94000, 'NY', 'Recruiting', 'IJ'),
-("2020-01-03", "2021-09-13", 85000, "NY",'Recruiting','IJ'),
-('2020-07-05', '2021-06-17', 145000, 'CA', 'Engineering', 'IJ'),
-('2020-11-16', '2021-05-21', 144000, 'CA', 'Engineering', 'IJ'),
-('2020-08-07', '2021-05-29', 141000, 'CA', 'Engineering', 'IJ'),
-('2021-04-19', '2021-05-28', 90000, 'TX','HR', 'IJ');
-
 INSERT INTO Internal_Job(internal_id, job_id) VALUES
 ('19I', 19),
 ('20I', 20),
@@ -498,40 +532,6 @@ INSERT INTO External_Job(external_id, job_id) VALUES
 ('16E', 16),
 ('17E', 17),
 ('18E', 18);
-
-INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name, job_ID) VALUES
-('153-88-4237', 'Engineer', 'Bill', 'Jones', 90000, 'Engineering', 18),
-('483-73-4242', 'Engineer', 'Julian', 'Rodriguez', 90000, 'Engineering', 19),
-('312-35-7475', 'Recruiter', 'Eva', 'Stevens', 85000, 'Recruiting', 23),
-('736-48-1357', 'Recruiter', 'Tyrod', 'Johnson', 85000, 'Recruiting', 24),
-('194-41-8184', 'Engineer', 'Reinold', 'Clancy', 104000, 'Engineering', 19);
-
-INSERT INTO Employee(SSN, employee_type, first_name, last_name, salary, department_name) VALUES
-('730-89-5394', 'Recruiter', 'Randi', 'Nare', 144000, 'Recruiting'),
-('687-80-9612', 'Recruiter', 'Rayna', 'Bilham', 104000, 'Recruiting'),
-('240-63-3621', 'Engineer', 'Mitchell', 'Leil', 98000, 'Engineering'),
-('318-09-7270', 'Engineer', 'Mirabella', 'Juhruke', 79000, 'Engineering'),
-('876-99-4396', 'HR_Manager', 'Gardner', 'Beazleigh', 57000, 'HR'),
-('203-80-5528', 'Recruiter', 'Blancha', 'Elmar', 141000, 'Recruiting'),
-('490-60-1855', 'HR_Manager', 'Sandye', 'Sisselot', 115000, 'HR'),
-('596-91-2513', 'Engineer', 'Brok', 'Orans', 149000, 'Engineering'),
-('551-87-0256', 'Engineer', 'Karia', 'Burridge', 92000, 'Engineering'),
-('752-68-5417', 'HR_Manager', 'Silva', 'Hillin', 80000, 'HR'),
-('243-91-8643', 'HR_Manager', 'Franny', 'Giraux', 103000, 'HR'),
-('883-90-7491', 'HR_Manager', 'Ezequiel', 'Dorbon', 136000, 'HR'),
-('323-66-3112', 'Recruiter', 'Alisander', 'Eydel', 88000, 'Recruiting'),
-('669-77-2284', 'Recruiter', 'Daisy', 'De Francesco', 110000, 'Recruiting'),
-('201-60-8504', 'HR_Manager', 'Brock', 'McLean', 117000, 'HR'),
-('898-97-8216', 'HR_Manager', 'Leopold', 'Coast', 131000, 'HR'),
-('349-63-1719', 'HR_Manager', 'Cord', 'Mapes', 109000, 'HR'),
-('385-42-1651', 'HR_Manager', 'Stella', 'Faux', 87000, 'HR'),
-('418-03-4362', 'HR_Manager', 'Eleni', 'Lutas', 128000, 'HR'),
-('389-70-8949', 'HR_Manager', 'Sibylle', 'Glavis', 149000, 'HR'),
-('359-38-7917', 'Recruiter', 'Gayle', 'Spadazzi', 110000, 'Recruiting'),
-('520-77-2028', 'Recruiter', 'Mic', 'Duiged', 62000, 'Recruiting'),
-('144-01-8634', 'Engineer', 'Dena', 'Burness', 63000, 'Engineering'),
-('468-40-5940', 'Engineer', 'Torey', 'Provest', 124000, 'Engineering'),
-('714-78-0040', 'Recruiter', 'Ewell', 'Hadland', 116000, 'Recruiting'); 
 
 INSERT INTO Engineer(employee_level, project, employee_id) VALUES
 (3, 'Derivatives Trading', 1),
@@ -613,10 +613,37 @@ DELIMITER ;
 
 -- DELETE Query
 /*The company has decided to eliminate applicants that requested for a part time contract of lesser than 3 months as it is seeking for long-term workforce expansion*/ 
-SET SQL_SAFE_UPDATES = 0; -- this statement is necessary to prevent an error of code 1175 that prevents deletion from a table when a KEY column is not used in the WHERE clause.
-DELETE Part_Time_Applicant, External_applicant
-FROM (Part_Time_Applicant NATURAL JOIN External_applicant)
-WHERE job_duration IN ('1 months', '2 months', '3 months');
+SET autocommit = OFF;
+DROP PROCEDURE IF EXISTS part_time_applicants_removal;
+
+DELIMITER $$
+CREATE PROCEDURE part_time_applicants_removal()
+BEGIN
+	DECLARE errorFlag INT DEFAULT 0; #variable to be used to detect error.
+    
+	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+    SET errorFlag = 1;
+    END;
+    
+    START TRANSACTION;
+		SET SQL_SAFE_UPDATES = 0; -- this statement is necessary to prevent an error of code 1175 that prevents deletion from a table when a KEY column is not used in the WHERE clause.
+		DELETE External_applicant, Applies_For
+        FROM (External_applicant NATURAL JOIN Applies_For NATURAL JOIN Part_Time_Applicant)
+        WHERE job_duration IN ('1 months', '2 months', '3 months');
+        
+    IF (errorFlag = 0)THEN 
+		COMMIT;
+	ELSE
+		ROLLBACK;
+	END IF;
+END$$
+
+DELIMITER ;
+
+-- DELETE Query
+CALL part_time_applicants_removal;
+
 
 -- UPDATE Query
 CALL performJobSwitch();
@@ -652,6 +679,7 @@ AS 	SELECT *
 										WHERE job_ID IS NOT NULL) AS T2); 
 
 -- This query obtains the job with the maximum number of applicants (inluding external and internal). 
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY','')); -- This setting prevents an error or code 1055 that pertains to GROUP BY clauses.
 SELECT job_ID, MAX(Total_applicants) AS Applicants, department_name AS Department, salary AS Salary, location AS Location
 FROM
 (	SELECT job_ID, COUNT(*) AS Total_applicants, salary, location, department_name
@@ -674,6 +702,7 @@ FROM
 WHERE post_date < '2021-01-01'
 GROUP BY job_ID
 ORDER BY post_date ASC, deadline ASC;
+
 
  
 
